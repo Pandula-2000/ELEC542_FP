@@ -1,0 +1,5 @@
+# M2 — proposed + masked loss (background weight 0.2)
+variant: M2
+p_control: 0.5
+degrade: {enabled: true}
+masked_loss: true

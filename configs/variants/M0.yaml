@@ -1,0 +1,5 @@
+# M0 — naive baseline: standard DreamBooth-LoRA, no ControlNet in training
+variant: M0
+p_control: 0.0
+degrade: {enabled: false}
+masked_loss: false

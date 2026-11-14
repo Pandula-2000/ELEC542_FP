@@ -1,0 +1,5 @@
+# M3 — ablation: ControlNet always on, perfect (undegraded) maps. Random scale kept (trick 3).
+variant: M3
+p_control: 1.0
+degrade: {enabled: false}
+masked_loss: false

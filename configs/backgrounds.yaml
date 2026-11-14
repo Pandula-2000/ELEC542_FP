@@ -1,0 +1,31 @@
+# Tier C backgrounds (brief §5.3). Confirmed by the user 2026-11-07 (contexts + default placement).
+# Prompt for a personalized method = "a photo of sks <class> " + context
+confirmed: true
+backgrounds_dir: dataset/Backgrounds
+
+# C-composite placement defaults (fractions of the 512x512 image)
+#   size_frac: subject height / image height; x_center: horizontal center of the subject;
+#   y_bottom:  where the subject's lowest pixel ("feet") is placed;
+#   delta:     pasted depth range is [bg_depth_at_feet + delta, 1]  (near = bright)
+placement_defaults: {size_frac: 0.45, x_center: 0.5, y_bottom: 0.92, delta: 0.05}
+
+# Pose source for the pasted silhouette: Tier A (held-out photo) unless its mask is cut off by
+# the image border (then the subject can't "stand" on the ground) -> first un-truncated Tier B case.
+pose_source: auto
+
+# C-bg-only exploratory variant (background depth, nothing pasted): these subjects only
+bg_only_subjects: [dog, backpack]
+
+backgrounds:
+  # --- empty scenes -> C-composite for every subject
+  beach1.jpg:               {type: composite, context: "on the beach"}
+  beach2.jpg:               {type: composite, context: "on a pebble beach by the sea"}
+  city_roads.jpg:           {type: composite, context: "on the street of a mountain town"}
+  city_sunset_new_york.jpg: {type: composite, context: "on a city street at sunset"}
+  road-mountains.jpg:       {type: composite, context: "on a road with snowy mountains"}
+  times_square1jpg.jpg:     {type: composite, context: "in Times Square"}
+  # --- scenes that already contain a cat -> C-scene, only for subjects of class "cat" (cat2)
+  #     depth of the photo itself; source mask = the cat segmented in it
+  cat_pose1.jpg:            {type: scene, scene_class: cat, context: "sitting on the grass"}
+  cat_pose2.jpg:            {type: scene, scene_class: cat, context: "leaning over a wall"}   # watercolor painting
+  cat_pose3.jpg:            {type: scene, scene_class: cat, context: "lying on a rug"}

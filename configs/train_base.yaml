@@ -1,0 +1,53 @@
+# Base training config (brief §6). Variant files in configs/variants/ override keys.
+pretrained_model: stable-diffusion-v1-5/stable-diffusion-v1-5
+controlnet_model: lllyasviel/control_v11f1p_sd15_depth
+processed_dir: data/processed
+test_bank_dir: data/test_bank
+runs_dir: runs
+resolution: 512
+identifier: sks                  # prompt = "a photo of <identifier> <class>"
+
+# optimisation (§6.5). "steps" = optimizer steps; each = grad_accum micro-batches.
+max_steps: 1000
+checkpoint_steps: [400, 600, 800, 1000]
+lr: 1.0e-4
+lr_scheduler: constant_with_warmup
+lr_warmup_steps: 50
+weight_decay: 1.0e-2
+batch_size: 1
+grad_accum: 2
+max_grad_norm: 1.0               # diffusers DreamBooth-LoRA example default
+optimizer: adamw8bit             # falls back to torch AdamW if bitsandbytes fails
+precision: bf16                  # frozen weights; LoRA params + loss in fp32
+gradient_checkpointing: true
+seed: 0
+
+lora:
+  rank: 16
+  alpha: 16
+  init: gaussian
+  target_modules: [to_q, to_k, to_v, to_out.0]
+
+# BoothNet tricks (§6.4) — base = off (M0); variants turn them on
+p_control: 0.0                   # trick 1: P(ControlNet active) per sample
+scale_min: 0.5                   # trick 3: conditioning scale ~ U(scale_min, scale_max)
+scale_max: 1.0
+degrade:                         # trick 2 (depth map only)
+  enabled: false
+  blur_sigma_max: 4.0
+  resample_factors: [1, 2, 4, 8]
+  translate_frac: 0.04
+  scale_range: [0.95, 1.05]
+  rotate_deg: 3.0
+masked_loss: false               # trick 4
+bg_weight: 0.2
+
+prior_preservation: false        # not implemented yet (flag reserved, §6.5)
+
+validation:                      # §6.8
+  every: 200                     # also at step 0 (untrained reference)
+  steps: 30
+  guidance_scale: 7.5
+  seed: 0
+  controlnet_scale: 0.8
+  text_context: on the beach

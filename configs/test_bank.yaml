@@ -1,0 +1,25 @@
+# Test control bank (brief §5.3). Built by scripts/build_test_bank.py.
+out_dir: data/test_bank
+
+# Tier B: same class, different instance. Sources chosen by hand for pose diversity
+# (full-body where possible; dog5/02 skipped: mirrored composite photo).
+#   real:  <subject_folder>/<img_stem> from dataset/Subjects
+#   sd:    generated with base SD1.5 (no LoRA, no ControlNet) from "a photo of a <tierb_noun>".
+#          sd_count: n -> try seeds 0..sd_max_seed in order, keep the first n whose detected
+#          box does not touch the image border (a cut-off object is useless as a layout source).
+tier_b:
+  dog:      {real: [dog2/00, dog3/03, dog7/01]}
+  dog6:     {real: [dog2/00, dog3/03, dog7/01]}
+  cat2:     {real: [cat/00, cat/01, cat/04]}
+  backpack: {real: [backpack_dog/01, backpack_dog/02, backpack_dog/04]}
+  teapot:   {sd_count: 3}
+  # class noun is "toy"; "a photo of a toy" gives arbitrary toys -> use "toy car" for Tier B generation only
+  rc_car:   {sd_count: 3, tierb_noun: toy car}
+sd_max_seed: 15
+border_margin_px: 3
+
+sd_generation:              # same sampler settings as Phase 3 inference
+  model: stable-diffusion-v1-5/stable-diffusion-v1-5
+  steps: 30
+  guidance_scale: 7.5
+  scheduler: unipc

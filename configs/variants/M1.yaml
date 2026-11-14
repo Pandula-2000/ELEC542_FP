@@ -1,0 +1,5 @@
+# M1 — proposed: ControlNet in the loop, 50% control dropout, degraded maps, random scale
+variant: M1
+p_control: 0.5
+degrade: {enabled: true}
+masked_loss: false

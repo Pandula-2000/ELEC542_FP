@@ -1,0 +1,33 @@
+# Subjects used in the experiments (brief §5.1). Class nouns checked against
+# dataset/Subjects/prompts_and_classes.txt.
+subjects_dir: dataset/Subjects
+class_file: dataset/Subjects/prompts_and_classes.txt
+processed_dir: data/processed
+resolution: 512
+identifier: sks
+heldout_rule: last_sorted      # hold out the last image in sorted filename order
+
+# Cropping: strip baked-in black bars, then square crop. Non-square images get a
+# subject-aware crop (window keeping the most mask pixels); square images are unaffected.
+strip_borders: true
+subject_aware_crop: true
+
+# Segmentation (SubjectMasker in boothnet/preprocess.py), per category:
+#   object -> Grounding-DINO(seg_prompt) box -> SAM
+#   live   -> rembg/BiRefNet salient mask, components overlapping the Grounding-DINO box
+masker:
+  rembg_model: birefnet-general
+  threshold: 0.5
+  box_threshold: 0.30
+  min_overlap: 0.10      # live: keep a salient component if >=10% of it lies in the DINO box
+  min_area: 0.002        # drop components smaller than 0.2% of the image
+  max_hole_frac: 0.001   # fill enclosed holes < 0.1% of the image (pinholes); keeps e.g. teapot handle loop
+
+# seg_prompt: text for Grounding-DINO only (defaults to class). NOT used in SD prompts.
+subjects:
+  - {name: dog,      class: dog,      category: live}
+  - {name: dog6,     class: dog,      category: live}
+  - {name: cat2,     class: cat,      category: live}
+  - {name: backpack, class: backpack, category: object}
+  - {name: teapot,   class: teapot,   category: object}
+  - {name: rc_car,   class: toy,      category: object, seg_prompt: toy car}

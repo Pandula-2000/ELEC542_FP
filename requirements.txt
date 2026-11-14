@@ -1,0 +1,23 @@
+# Python 3.11 (conda env at X:\Environments\BoothNet)
+# Install:  python -m pip install -r requirements.txt
+# torch/torchvision come from the CUDA 12.8 index (required for RTX 50-series / sm_120)
+--extra-index-url https://download.pytorch.org/whl/cu128
+torch==2.11.0+cu128
+torchvision==0.26.0+cu128
+diffusers==0.42.1
+transformers==5.22.2
+peft==0.21.2
+accelerate==1.15.0
+safetensors==0.8.0
+huggingface-hub==2.4.0
+opencv-python==5.0.0.93
+pillow==13.0.0
+numpy==2.4.6
+pandas==3.1.1
+matplotlib==3.11.2
+pyyaml==6.0.3
+tqdm==4.70.1
+rembg[gpu]==2.0.87
+onnxruntime-gpu==1.23.2   # CUDA-12 build; 1.31 is built for CUDA 13 and silently falls back to CPU next to torch cu128
+# optional: 8-bit AdamW (verified working on this machine, native Windows)
+bitsandbytes==0.50.2
