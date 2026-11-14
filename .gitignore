@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.vscode/
+# original images (third-party licenses) - transferred separately, never committed
+dataset/
+# derived / large artifacts
+data/
+runs/
+outputs/
+results/*.png
+*.safetensors
+*.ckpt
